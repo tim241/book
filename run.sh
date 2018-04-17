@@ -14,6 +14,11 @@ printError () {
 print () {
 	echo -e "\n${BLUE}===> $@${NC}\n"
 }
+if [[ $1 = exercise* ]]; then
+	chapter=`echo $PAR | cut -d'.' -f2`
+	program=`echo $PAR | cut -d'.' -f3`
+	cdir=chapter$chapter/exercises/$program
+fi
 if [ -f "$cdir/main.c" ]; then
 	print Compiling program $program from chapter $chapter 
 	cd $cdir
@@ -41,7 +46,12 @@ else
 		for program in *; do
 			if [ $program != *exercises* ]; then
 				echo $chapter.$program | sed "s/chapter//g"
-			fi 
+			else
+				cd exercises
+				for program in *; do
+					echo exercise.$chapter.$program | sed "s/chapter//g"
+				done
+			fi
 		done
 		cd $bdir
 	done		
